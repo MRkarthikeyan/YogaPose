@@ -1,0 +1,28 @@
+[Unit]
+Description=Yoga Pose Detection Competition Judge
+# Ensure the service starts after the network and display manager are up
+After=network.target graphical.target 
+Wants=graphical.target
+
+[Service]
+Type=simple
+# We run as the standard 'pi' user (change this if your Pi user is different)
+User=pi
+Group=pi
+
+# This allows the background service to access the X11 display server to show the OpenCV window
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+
+# Set the working directory to where the app is cloned (update this path on the Pi!)
+WorkingDirectory=/home/pi/YogaPoseDetection
+
+# Command to execute (uses the virtual environment's python)
+ExecStart=/home/pi/YogaPoseDetection/venv/bin/python3 /home/pi/YogaPoseDetection/main.py
+
+# Standard restart policy to keep it alive if it crashes
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=graphical.target
